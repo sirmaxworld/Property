@@ -1,4 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/gellwkvu/public_html
+    - export DEPLOYPATH=/home/gellwkvu/public_html/
     - /bin/cp -R dist/* $DEPLOYPATH 
