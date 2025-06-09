@@ -7,10 +7,10 @@ const PropertyGallery = () => {
   const images = [
     { src: '/images/1.jpg', alt: 'Bild 1' },
     { src: '/images/2.jpg', alt: 'Bild 2' },
-    { src: '/images/6.jpg', alt: 'Bild 6' },
     { src: '/images/3.jpg', alt: 'Bild 3' },
     { src: '/images/4.jpg', alt: 'Bild 4' },
     { src: '/images/5.jpg', alt: 'Bild 5' },
+    { src: '/images/6.jpg', alt: 'Bild 6' },
     { src: '/images/7.jpg', alt: 'Bild 7' },
     { src: '/images/8.jpg', alt: 'Bild 8' },
     { src: '/images/9.jpg', alt: 'Bild 9' },
@@ -53,19 +53,15 @@ const PropertyGallery = () => {
           {images.map((image, index) => (
             <div
               key={index}
-              className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer group transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:-translate-y-3 hover:rotate-1"
+              className="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
               onClick={() => openLightbox(index)}
             >
               <img
                 src={image.src}
                 alt={image.alt}
-                className="w-full h-64 object-cover transition-all duration-700 group-hover:scale-125 group-hover:brightness-110"
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
-              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-all duration-300" />
-              <div className="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-0 group-hover:scale-100 flex items-center justify-center">
-                <span className="text-white text-xs">+</span>
-              </div>
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
           ))}
         </div>
