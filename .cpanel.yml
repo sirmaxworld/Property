@@ -1,6 +1,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/gellwkvu/public_html/
+    - find $DEPLOYPATH -mindepth 1 -not -path "*/cgi-bin*" -delete
     - /bin/cp dist/index.html $DEPLOYPATH
     - /bin/cp -R dist/assets $DEPLOYPATH
     - /bin/cp -R dist/images $DEPLOYPATH
