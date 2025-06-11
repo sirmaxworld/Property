@@ -1,4 +1,9 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/gellwkvu/public_html/
-    - /bin/cp -R dist/* $DEPLOYPATH 
+    - /bin/cp dist/index.html $DEPLOYPATH
+    - /bin/cp -R dist/assets $DEPLOYPATH
+    - /bin/cp -R dist/images $DEPLOYPATH
+    - /bin/cp -R dist/documents $DEPLOYPATH
+    - /bin/cp dist/favicon.ico $DEPLOYPATH
+    - /bin/cp dist/robots.txt $DEPLOYPATH 
