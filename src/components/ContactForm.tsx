@@ -136,7 +136,11 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                 <CardTitle className="text-xl text-primary">Senden Sie uns eine Nachricht</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form 
+                  action="https://formspree.io/f/mzzggdej" 
+                  method="POST" 
+                  className="space-y-4"
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-primary mb-2">
@@ -147,8 +151,6 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                         name="name"
                         type="text"
                         required
-                        value={formData.name}
-                        onChange={handleChange}
                         placeholder="Ihr vollständiger Name"
                       />
                     </div>
@@ -160,13 +162,10 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                         id="phone"
                         name="phone"
                         type="tel"
-                        value={formData.phone}
-                        onChange={handleChange}
                         placeholder="Ihre Telefonnummer"
                       />
                     </div>
                   </div>
-                  
                   <div>
                     <label className="block text-sm font-medium text-primary mb-3">
                       Ich bin interessiert als
@@ -178,8 +177,6 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                             type="radio"
                             name="inquirerType"
                             value={type}
-                            checked={formData.inquirerType === type}
-                            onChange={handleChange}
                             className="w-4 h-4 text-blue-500 border-gray-300 focus:ring-blue-500"
                           />
                           <span className="text-primary text-sm">{type}</span>
@@ -187,7 +184,6 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                       ))}
                     </div>
                   </div>
-                  
                   <div>
                     <label htmlFor="email" className="block text-sm font-medium text-primary mb-2">
                       E-Mail-Adresse
@@ -197,12 +193,9 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                       name="email"
                       type="email"
                       required
-                      value={formData.email}
-                      onChange={handleChange}
                       placeholder="ihre.email@beispiel.com"
                     />
                   </div>
-                  
                   <div>
                     <label htmlFor="message" className="block text-sm font-medium text-primary mb-2">
                       Nachricht
@@ -212,12 +205,12 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                       name="message"
                       required
                       rows={3}
-                      value={formData.message}
-                      onChange={handleChange}
                       placeholder="Haben Sie noch Fragen oder Anregungen?"
                     />
                   </div>
-                  
+                  {/* Hidden field for reply-to (confirmation email) */}
+                  <input type="hidden" name="_replyto" value="" />
+                  {/* You can add a redirect or thank you message here if needed */}
                   <Button 
                     type="submit" 
                     size="lg" 
