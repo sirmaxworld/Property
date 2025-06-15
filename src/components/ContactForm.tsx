@@ -6,81 +6,66 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Send, Download, FileText } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+const inquirerTypes = ['Privat', 'Investor', 'Makler', 'Architekt'];
+
 const ContactForm = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    subject: '',
     message: '',
     inquirerType: ''
   });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Prepare email data
-    const emailData = {
-      to: 'info@gellert.live',
-      subject: `Anfrage Grundstück Amden - ${formData.inquirerType || 'Interessent'}`,
-      body: `
-Neue Anfrage für das Grundstück in Amden:
-
-=== KONTAKTDATEN ===
-Name: ${formData.name}
-E-Mail: ${formData.email}
-Telefon: ${formData.phone}
-
-=== INTERESSENTENTYP ===
-Interessiert als: ${formData.inquirerType || 'Nicht ausgewählt'}
-
-=== NACHRICHT ===
-${formData.message}
-
----
-Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
-      `
-    };
-    
-    try {
-      // Here you would send to your backend API endpoint
-      // For now, we'll log the data and show success message
-      console.log('Email data prepared:', emailData);
-      
-      // In production, you would call your email API here:
-      // const response = await fetch('/api/send-email', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(emailData)
-      // });
-      
-      toast({
-        title: "Nachricht gesendet!",
-        description: "Vielen Dank für Ihr Interesse. Wir werden Sie bald kontaktieren.",
-      });
-
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-        inquirerType: ''
-      });
-    } catch (error) {
-      toast({
-        title: "Fehler beim Senden",
-        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
-        variant: "destructive"
-      });
-    }
-  };
+  const [loading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleRadio = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      inquirerType: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setDisabled(true);
+
+    try {
+      const response = await fetch('https://gellert.live/mailapi/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Nachricht gesendet!",
+          description: "Vielen Dank für Ihr Interesse. Wir werden Sie bald kontaktieren.",
+        });
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '', inquirerType: '' });
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (error) {
+      toast({
+        title: "Fehler beim Senden",
+        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+      setTimeout(() => setDisabled(false), 5000); // Rate limit: 5 seconds
+    }
   };
 
   return (
@@ -136,48 +121,80 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                 <CardTitle className="text-xl text-primary">Senden Sie uns eine Nachricht</CardTitle>
               </CardHeader>
               <CardContent>
-                <form 
-                  action="https://formspree.io/f/mzzggdej" 
-                  method="POST" 
-                  className="space-y-4"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-primary mb-2">
-                        Vollständiger Name
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        placeholder="Ihr vollständiger Name"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-primary mb-2">
-                        Telefonnummer
-                      </label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        placeholder="Ihre Telefonnummer"
-                      />
-                    </div>
+                <form className="space-y-4" onSubmit={handleSubmit} autoComplete="off">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-primary mb-2">
+                      Vollständiger Name *
+                    </label>
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Ihr vollständiger Name"
+                      autoComplete="name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-primary mb-2">
+                      E-Mail-Adresse *
+                    </label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="ihre.email@beispiel.com"
+                      autoComplete="email"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-primary mb-2">
+                      Telefonnummer
+                    </label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="Ihre Telefonnummer"
+                      autoComplete="tel"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="subject" className="block text-sm font-medium text-primary mb-2">
+                      Betreff *
+                    </label>
+                    <Input
+                      id="subject"
+                      name="subject"
+                      type="text"
+                      required
+                      value={formData.subject}
+                      onChange={handleChange}
+                      placeholder="Anfrage zum Grundstück"
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-primary mb-3">
                       Ich bin interessiert als
                     </label>
                     <div className="grid grid-cols-2 gap-3">
-                      {['Privat', 'Investor', 'Makler', 'Architekt'].map((type) => (
+                      {inquirerTypes.map((type) => (
                         <label key={type} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 cursor-pointer transition-colors">
                           <input
                             type="radio"
                             name="inquirerType"
                             value={type}
+                            checked={formData.inquirerType === type}
+                            onChange={handleRadio}
                             className="w-4 h-4 text-blue-500 border-gray-300 focus:ring-blue-500"
+                            required
                           />
                           <span className="text-primary text-sm">{type}</span>
                         </label>
@@ -185,40 +202,38 @@ Gesendet über die Website: ${new Date().toLocaleString('de-CH')}
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-primary mb-2">
-                      E-Mail-Adresse
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="ihre.email@beispiel.com"
-                    />
-                  </div>
-                  <div>
                     <label htmlFor="message" className="block text-sm font-medium text-primary mb-2">
-                      Nachricht
+                      Nachricht *
                     </label>
                     <Textarea
                       id="message"
                       name="message"
                       required
-                      rows={3}
+                      rows={4}
+                      value={formData.message}
+                      onChange={handleChange}
                       placeholder="Haben Sie noch Fragen oder Anregungen?"
                     />
                   </div>
-                  {/* Hidden field for reply-to (confirmation email) */}
-                  <input type="hidden" name="_replyto" value="" />
-                  {/* You can add a redirect or thank you message here if needed */}
-                  <Button 
-                    type="submit" 
-                    size="lg" 
+                  <Button
+                    type="submit"
+                    size="lg"
                     className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+                    disabled={loading || disabled}
+                    aria-busy={loading}
                   >
-                    <Send className="h-4 w-4 mr-2" />
-                    Nachricht senden
+                    {loading ? "Senden..." : (
+                      <>
+                        <Send className="h-4 w-4 mr-2" />
+                        Nachricht senden
+                      </>
+                    )}
                   </Button>
+                  {disabled && (
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      Sie können in wenigen Sekunden erneut senden.
+                    </p>
+                  )}
                 </form>
               </CardContent>
             </Card>

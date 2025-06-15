@@ -14,7 +14,7 @@ const Footer = () => {
           </p>
           <div className="border-t border-primary-foreground/20 pt-6">
             <p className="text-primary-foreground/60">
-              © 2024 Gellert.live. Alle Rechte vorbehalten. | Privatverkauf
+              © 2025 Gellert.live. Alle Rechte vorbehalten. | Privatverkauf
             </p>
           </div>
         </div>
