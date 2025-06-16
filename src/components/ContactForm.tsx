@@ -19,6 +19,55 @@ const ContactForm = () => {
         </div>
         <div className="max-w-xl mx-auto space-y-6">
           <Card>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold text-primary mb-2 flex items-center gap-2">
+                <FileText className="h-5 w-5 text-blue-500" />
+                Weitere Informationen
+              </h3>
+              <div className="space-y-3">
+                <a 
+                  href="/documents/Expose_Amden_Gellert.pdf" 
+                  download 
+                  className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group cursor-pointer"
+                >
+                  <div className="bg-blue-500 p-2 rounded-full group-hover:bg-blue-600 transition-colors">
+                    <Download className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-primary">Expose Amden Gellert</h4>
+                    <p className="text-sm text-muted-foreground">Ausführliche Präsentation und Grundstücksexposé</p>
+                  </div>
+                </a>
+                <a 
+                  href="/documents/Dokumente_Bauland_8873_Amden.pdf" 
+                  download 
+                  className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group cursor-pointer"
+                >
+                  <div className="bg-blue-500 p-2 rounded-full group-hover:bg-blue-600 transition-colors">
+                    <Download className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-primary">Dokumente Bauland 8873 Amden</h4>
+                    <p className="text-sm text-muted-foreground">Grundbuchauszug und weitere Unterlagen</p>
+                  </div>
+                </a>
+                <a 
+                  href="/documents/BauR_inkl._1._Nachtrag.pdf" 
+                  download 
+                  className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group cursor-pointer"
+                >
+                  <div className="bg-blue-500 p-2 rounded-full group-hover:bg-blue-600 transition-colors">
+                    <Download className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium text-primary">Baureglement Amden</h4>
+                    <p className="text-sm text-muted-foreground">Rechtliche Bestimmungen und Bauvorschriften</p>
+                  </div>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
             <CardContent className="p-6 flex items-center gap-4">
               <div className="bg-blue-100 p-3 rounded-full">
                 <Phone className="h-6 w-6 text-blue-500" />
