@@ -85,7 +85,7 @@ const ContactForm = () => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-primary">E-Mail</h3>
-                <p className="text-muted-foreground">info@gellert.live</p>
+                <p className="text-muted-foreground">robert.gellert@proton.me</p>
               </div>
             </CardContent>
           </Card>
